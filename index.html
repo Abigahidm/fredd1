@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RegistrosFREEDY — Taller</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f0f0f;
+  --surface:#181818;
+  --surface2:#202020;
+  --surface3:#2a2a2a;
+  --border:#2e2e2e;
+  --border2:#3a3a3a;
+  --gold:#f0a500;
+  --gold2:#ffd166;
+  --gold-dim:#1e1800;
+  --green:#22c55e;
+  --green-dim:#071a0f;
+  --blue:#3b82f6;
+  --blue2:#93c5fd;
+  --blue-dim:#0a1530;
+  --blue-border:#1e3a5f;
+  --orange:#f97316;
+  --orange2:#fdba74;
+  --orange-dim:#1a0e00;
+  --red:#ef4444;
+  --red-dim:#1a0707;
+  --text:#f0f0f0;
+  --text2:#aaa;
+  --text3:#555;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Plus Jakarta Sans',sans-serif;
+}
+html{font-size:14px;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100;flex-shrink:0;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:32px;height:32px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.logo-name{font-family:var(--sans);font-weight:800;font-size:16px;letter-spacing:-.4px;}
+.logo-name span{color:var(--gold);}
+.hd-center{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:.06em;}
+.hd-right{display:flex;align-items:center;gap:8px;}
+.tbtn{font-family:var(--sans);font-size:12px;font-weight:500;padding:8px 15px;border-radius:7px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .15s;}
+.tbtn:hover{background:var(--surface2);color:var(--text);border-color:var(--border2);}
+.tbtn-gold{background:var(--gold);color:#000;border-color:var(--gold);font-weight:700;}
+.tbtn-gold:hover{background:#d49200;border-color:#d49200;color:#000;}
+.tbtn-danger{color:var(--red);border-color:var(--red-dim);}
+.tbtn-danger:hover{background:var(--red-dim);color:var(--red);}
+
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border);flex-shrink:0;}
+.stat{background:var(--surface);padding:16px 20px;}
+.stat-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:6px;}
+.stat-v{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--text);line-height:1;}
+.stat-v.gold{color:var(--gold);}
+.stat-v.blue{color:var(--blue2);}
+.stat-v.orange{color:var(--orange2);}
+.stat-v.green{color:var(--green);}
+.stat-sub{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:5px;}
+
+.main{flex:1;max-width:1200px;width:100%;margin:0 auto;padding:22px;}
+
+.form-panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:20px;}
+.panel-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:13px;display:flex;align-items:center;gap:8px;}
+.panel-lbl::before{content:'';width:3px;height:13px;background:var(--gold);border-radius:2px;}
+.form-row{display:grid;grid-template-columns:1fr 130px 130px 130px 145px auto;gap:8px;align-items:end;}
+.fi{font-family:var(--mono);font-size:12px;padding:10px 12px;border:1px solid var(--border2);border-radius:7px;background:var(--surface2);color:var(--text);width:100%;transition:border-color .15s;}
+.fi:focus{outline:none;border-color:var(--gold);}
+.fi::placeholder{color:var(--text3);}
+.fi-efec{border-color:#1e3a1e;}
+.fi-efec:focus{border-color:var(--green);}
+.fi-banc{border-color:var(--blue-border);}
+.fi-banc:focus{border-color:var(--blue);}
+.fi-add{font-family:var(--sans);font-size:13px;font-weight:700;padding:10px 20px;border-radius:7px;cursor:pointer;background:var(--gold);color:#000;border:none;white-space:nowrap;transition:background .15s;}
+.fi-add:hover{background:#d49200;}
+
+.legend{display:flex;gap:18px;margin-bottom:14px;flex-wrap:wrap;}
+.leg{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--text3);}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+.sec-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;flex-wrap:wrap;gap:10px;}
+.sec-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);}
+.sec-right{display:flex;gap:7px;}
+
+.filters{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;align-items:center;}
+.fsep{width:1px;height:18px;background:var(--border);margin:0 4px;}
+.ft{font-family:var(--mono);font-size:11px;padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;cursor:pointer;color:var(--text3);transition:all .12s;}
+.ft:hover{border-color:var(--border2);color:var(--text2);}
+.ft.on{border-color:var(--gold);background:var(--gold-dim);color:var(--gold2);}
+
+.dg{margin-bottom:22px;}
+.dg-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--border);}
+.dg-name{font-weight:700;font-size:13px;color:var(--text);text-transform:capitalize;}
+.dg-meta{font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;gap:14px;flex-wrap:wrap;}
+.dg-meta .g{color:var(--green);}
+.dg-meta .b{color:var(--blue2);}
+.dg-meta .o{color:var(--orange2);}
+.dg-meta .gold{color:var(--gold2);}
+
+.tw{border:1px solid var(--border);border-radius:9px;overflow:hidden;}
+table{width:100%;border-collapse:collapse;}
+thead{background:var(--surface2);}
+th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);}
+th.th-efec{color:var(--green);opacity:.85;}
+th.th-banc{color:var(--blue);opacity:.8;}
+th.th-pend{color:var(--orange);opacity:.7;}
+th.th-total{color:var(--gold);opacity:.85;}
+td{padding:9px 13px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr{transition:background .1s;}
+tbody tr:hover{background:var(--surface2);}
+.tn{font-family:var(--mono);font-size:11px;color:var(--text3);width:36px;}
+
+.cv{font-family:var(--mono);font-size:13px;cursor:pointer;padding:4px 9px;border-radius:5px;display:inline-block;border:1px solid transparent;transition:all .1s;}
+.cv-efec{color:var(--green);}
+.cv-efec:hover{border-color:#1e3a1e;background:var(--green-dim);}
+.cv-banc{color:var(--blue2);}
+.cv-banc:hover{border-color:var(--blue-border);background:var(--blue-dim);}
+.cv-total{color:var(--gold2);font-weight:500;}
+.cv-empty{color:var(--text3);border:1px dashed var(--border);font-style:italic;}
+.cv-empty-efec:hover{border-color:var(--green);color:var(--green);background:var(--green-dim);}
+.cv-empty-banc:hover{border-color:var(--blue);color:var(--blue2);background:var(--blue-dim);}
+.cv-pend-pos{font-family:var(--mono);font-size:13px;color:var(--orange2);}
+.cv-pend-zero{font-family:var(--mono);font-size:13px;color:var(--green);}
+.cv-pend-na{font-family:var(--mono);font-size:13px;color:var(--text3);}
+.pi{font-family:var(--mono);font-size:12px;padding:5px 9px;border-radius:5px;width:115px;}
+.pi:focus{outline:none;}
+.pi-efec{border:1px solid var(--green);background:var(--green-dim);color:var(--green);}
+.pi-banc{border:1px solid var(--blue);background:var(--blue-dim);color:var(--blue2);}
+.ta{text-align:right;white-space:nowrap;width:76px;}
+.ib{background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:13px;padding:4px 7px;border-radius:5px;transition:all .1s;}
+.ib:hover{background:var(--surface3);color:var(--text);}
+.ib.d:hover{color:var(--red);background:var(--red-dim);}
+.ib.e:hover{color:var(--gold2);background:var(--gold-dim);}
+
+.empty{text-align:center;padding:52px 20px;color:var(--text3);font-size:13px;border:1px dashed var(--border);border-radius:10px;}
+.empty-icon{font-size:32px;margin-bottom:10px;opacity:.4;}
+
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:13px;padding:26px;width:460px;max-width:100%;box-shadow:0 30px 80px rgba(0,0,0,.6);}
+.modal-title{font-weight:700;font-size:17px;margin-bottom:18px;}
+.mf{margin-bottom:14px;}
+.mf label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);margin-bottom:6px;}
+.mf .fi-efec-m{border-color:#1e3a1e;}
+.mf .fi-efec-m:focus{border-color:var(--green);}
+.mf .fi-banc-m{border-color:var(--blue-border);}
+.mf .fi-banc-m:focus{border-color:var(--blue);}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.mf-hint{font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--mono);}
+.ma{display:flex;gap:9px;justify-content:flex-end;margin-top:20px;}
+.mb{font-family:var(--sans);font-size:12px;font-weight:500;padding:9px 17px;border-radius:7px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);}
+.mb:hover{background:var(--surface2);}
+.mb-s{background:var(--gold);color:#000;border-color:var(--gold);font-weight:700;}
+.mb-s:hover{background:#d49200;}
+
+.confirm-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:300;align-items:center;justify-content:center;padding:20px;}
+.confirm-ov.open{display:flex;}
+.cbox{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:24px;width:360px;max-width:100%;}
+.cbox-title{font-weight:700;font-size:15px;margin-bottom:8px;}
+.cbox-msg{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6;}
+.cbox-btns{display:flex;gap:9px;justify-content:flex-end;}
+.mb-del{color:var(--red);border-color:var(--red-dim);}
+.mb-del:hover{background:var(--red-dim);color:var(--red);}
+
+.toastwrap{position:fixed;bottom:22px;right:22px;z-index:500;pointer-events:none;}
+.toast{font-family:var(--mono);font-size:12px;padding:11px 18px;border-radius:8px;background:var(--surface);border:1px solid var(--border2);color:var(--text);opacity:0;transform:translateY(8px);transition:all .22s;min-width:180px;text-align:center;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.ok{border-color:var(--green);color:var(--green);}
+.toast.err{border-color:var(--red);color:var(--red);}
+
+@media(max-width:900px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .stats .stat:last-child{grid-column:1/-1;}
+  .form-row{grid-template-columns:1fr 1fr;}
+  .form-row input:first-child{grid-column:1/-1;}
+  .form-row .fi-add{grid-column:1/-1;}
+  .hd-center{display:none;}
+  .main{padding:14px;}
+  .topbar{padding:0 14px;}
+  th.th-pend,td:nth-child(6){display:none;}
+}
+@media print{
+  .topbar,.form-panel,.filters,.sec-bar,.stats,.ib,.ta,.legend{display:none!important;}
+  body{background:#fff;color:#000;}
+  .main{padding:0;}
+  .dg{page-break-inside:avoid;}
+  .tw{border:1px solid #ddd;}
+  td,th{color:#000!important;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-mark">🔧</div>
+    <div class="logo-name">REGISTROS<span>FREEDY</span></div>
+  </div>
+  <div class="hd-center" id="hdr-date"></div>
+  <div class="hd-right">
+    <button class="tbtn" onclick="openModal()">+ Nuevo trabajo</button>
+    <button class="tbtn tbtn-gold" onclick="exportPDF()">⬇ Exportar PDF</button>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-l">Total trabajos</div>
+    <div class="stat-v" id="s-total">0</div>
+    <div class="stat-sub" id="s-tsub">—</div>
+  </div>
+  <div class="stat">
+    <div class="stat-l">Total cobrado</div>
+    <div class="stat-v gold" id="s-total-cobrado">S/ 0.00</div>
+    <div class="stat-sub">efectivo + bancario</div>
+  </div>
+  <div class="stat">
+    <div class="stat-l">Efectivo</div>
+    <div class="stat-v green" id="s-efec">S/ 0.00</div>
+    <div class="stat-sub">pagos en efectivo</div>
+  </div>
+  <div class="stat">
+    <div class="stat-l">Bancario</div>
+    <div class="stat-v blue" id="s-banc">S/ 0.00</div>
+    <div class="stat-sub">transferencias / yape</div>
+  </div>
+  <div class="stat">
+    <div class="stat-l">Hoy</div>
+    <div class="stat-v" id="s-hoy">0</div>
+    <div class="stat-sub" id="s-hsub">trabajos</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="form-panel">
+    <div class="panel-lbl">Registro rápido</div>
+    <div class="form-row">
+      <input class="fi" type="text" id="q-job" placeholder="Trabajo realizado (ej. Cambio de aceite Toyota...)" />
+      <input class="fi fi-efec" type="number" id="q-efec" placeholder="S/ Efectivo" min="0" step="0.50" />
+      <input class="fi fi-banc" type="number" id="q-banc" placeholder="S/ Bancario" min="0" step="0.50" />
+      <input class="fi" type="date" id="q-date" />
+      <button class="fi-add" onclick="quickAdd()">Registrar</button>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>Pago en efectivo</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--blue2)"></div>Pago bancario (Yape/transfer)</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--gold2)"></div>Total cobrado (efectivo + bancario)</div>
+  </div>
+
+  <div class="sec-bar">
+    <span class="sec-title">Trabajos registrados</span>
+    <div class="sec-right">
+      <button class="tbtn" onclick="confirmClearToday()">Limpiar hoy</button>
+      <button class="tbtn tbtn-danger" onclick="confirmClearAll()">Borrar todo</button>
+    </div>
+  </div>
+
+  <div class="filters" id="filtros"></div>
+  <div id="lista"></div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="closeMO(event)">
+  <div class="modal">
+    <div class="modal-title" id="m-title">Nuevo trabajo</div>
+    <div class="mf">
+      <label>Trabajo realizado</label>
+      <input class="fi" style="width:100%" type="text" id="m-job" placeholder="Descripción del trabajo..." />
+    </div>
+    <div class="mf">
+      <label>Forma de pago</label>
+      <div class="mf-row">
+        <div>
+          <input class="fi fi-efec-m" style="width:100%" type="number" id="m-efec" placeholder="0.00 — Efectivo" min="0" step="0.50" />
+          <div class="mf-hint">💵 Efectivo (S/)</div>
+        </div>
+        <div>
+          <input class="fi fi-banc-m" style="width:100%" type="number" id="m-banc" placeholder="0.00 — Bancario" min="0" step="0.50" />
+          <div class="mf-hint">🏦 Yape / Transfer (S/)</div>
+        </div>
+      </div>
+    </div>
+    <div class="mf">
+      <label>Fecha</label>
+      <input class="fi" style="width:100%" type="date" id="m-date" />
+    </div>
+    <div class="ma">
+      <button class="mb" onclick="closeModal()">Cancelar</button>
+      <button class="mb mb-s" id="m-save-btn" onclick="saveModal()">Guardar trabajo</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM -->
+<div class="confirm-ov" id="conf-ov">
+  <div class="cbox">
+    <div class="cbox-title" id="conf-title">¿Confirmar?</div>
+    <div class="cbox-msg" id="conf-msg"></div>
+    <div class="cbox-btns">
+      <button class="mb" onclick="closeConfirm()">Cancelar</button>
+      <button class="mb mb-del" id="conf-ok">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toastwrap"><div class="toast" id="toast"></div></div>
+
+<script>
+const INIT_DATA = [
+  {id:1,  job:'Camioneta Hilux',                              efec:null, banc:null, date:'2026-04-01'},
+  {id:2,  job:'Camioneta Hilux',                              efec:null, banc:null, date:'2026-04-01'},
+  {id:3,  job:'Cambio de aceite motocarga',                   efec:null, banc:null, date:'2026-04-01'},
+  {id:4,  job:'Cambio de aceite Nissan',                      efec:null, banc:null, date:'2026-04-01'},
+  {id:5,  job:'Cambio de aceite',                             efec:null, banc:null, date:'2026-04-02'},
+  {id:6,  job:'Cambio de aceite camion Isuzu',                efec:null, banc:null, date:'2026-04-02'},
+  {id:7,  job:'Motor y corona',                               efec:null, banc:null, date:'2026-04-02'},
+  {id:8,  job:'Afinamiento',                                  efec:null, banc:null, date:'2026-04-02'},
+  {id:9,  job:'Cambio de aceite Toyota',                      efec:null, banc:null, date:'2026-04-02'},
+  {id:10, job:'Cambio de aceite combi',                       efec:null, banc:null, date:'2026-04-02'},
+  {id:11, job:'Filtros',                                      efec:null, banc:null, date:'2026-04-04'},
+  {id:12, job:'Rodamientos delanteros camioneta',             efec:null, banc:null, date:'2026-04-04'},
+  {id:13, job:'Suspensión',                                   efec:null, banc:null, date:'2026-04-04'},
+  {id:14, job:'Cambio de aceite camion',                      efec:null, banc:null, date:'2026-04-04'},
+  {id:15, job:'Sistema eléctrico',                            efec:null, banc:null, date:'2026-04-04'},
+  {id:16, job:'Mantenimiento suspensión general (Volkswagen)',efec:null, banc:null, date:'2026-04-06'},
+  {id:17, job:'Sistema eléctrico luces',                      efec:null, banc:null, date:'2026-04-06'},
+  {id:18, job:'Diagnóstico Hyundai',                         efec:20,   banc:null, date:'2026-04-06'},
+  {id:19, job:'Diagnóstico alineamiento',                     efec:10,   banc:null, date:'2026-04-06'},
+  {id:20, job:'Cambio de rodamientos',                        efec:null, banc:null, date:'2026-04-07'},
+  {id:21, job:'Purgado de ATF (Yaris)',                       efec:null, banc:null, date:'2026-04-07'},
+];
+
+const KEY = 'tallerpro_v5';
+let data = JSON.parse(localStorage.getItem(KEY) || 'null');
+if (!data) { data = JSON.parse(JSON.stringify(INIT_DATA)); save(); }
+let nid = data.length ? Math.max(...data.map(d => d.id)) + 1 : 1;
+let filt = 'all';
+let editId = null;
+let editField = null;
+let mMode = 'new';
+let mEditId = null;
+
+function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
+function today() { return new Date().toISOString().split('T')[0]; }
+function longDate(f) {
+  return new Date(f + 'T12:00:00').toLocaleDateString('es-PE', {
+    weekday:'long', day:'2-digit', month:'long', year:'numeric'
+  }).replace(/^\w/, c => c.toUpperCase());
+}
+function shortDate(f) {
+  return new Date(f + 'T12:00:00').toLocaleDateString('es-PE', {
+    day:'2-digit', month:'2-digit', year:'numeric'
+  });
+}
+function total(item) {
+  return (item.efec || 0) + (item.banc || 0);
+}
+
+document.getElementById('q-date').value = today();
+document.getElementById('m-date').value = today();
+document.getElementById('hdr-date').textContent = new Date().toLocaleDateString('es-PE', {
+  weekday:'long', day:'2-digit', month:'long', year:'numeric'
+}).replace(/^\w/, c => c.toUpperCase());
+
+document.getElementById('q-job').addEventListener('keydown', e => { if (e.key === 'Enter') quickAdd(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeConfirm(); } });
+
+function quickAdd() {
+  const j = document.getElementById('q-job').value.trim();
+  if (!j) { document.getElementById('q-job').focus(); toast('Escribe el trabajo realizado', 'err'); return; }
+  const e = document.getElementById('q-efec').value;
+  const b = document.getElementById('q-banc').value;
+  const d = document.getElementById('q-date').value || today();
+  data.push({ id: nid++, job: j, efec: e ? parseFloat(e) : null, banc: b ? parseFloat(b) : null, date: d });
+  save();
+  document.getElementById('q-job').value = '';
+  document.getElementById('q-efec').value = '';
+  document.getElementById('q-banc').value = '';
+  document.getElementById('q-date').value = today();
+  render();
+  toast('✓ Trabajo registrado', 'ok');
+}
+
+function delItem(id) {
+  confirm2('¿Eliminar este trabajo?', 'Esta acción no se puede deshacer.', () => {
+    data = data.filter(d => d.id !== id);
+    save(); render(); toast('Trabajo eliminado');
+  });
+}
+
+function confirmClearToday() {
+  const hoy = today();
+  const n = data.filter(d => d.date === hoy).length;
+  if (!n) { toast('No hay trabajos registrados hoy', 'err'); return; }
+  confirm2('Limpiar trabajos de hoy', `Se eliminarán ${n} trabajos del día de hoy. ¿Continuar?`, () => {
+    data = data.filter(d => d.date !== hoy);
+    save(); render(); toast(`${n} trabajos eliminados`);
+  });
+}
+
+function confirmClearAll() {
+  confirm2('Borrar todos los registros', `Se eliminarán los ${data.length} trabajos registrados. Esta acción no se puede deshacer.`, () => {
+    data = []; nid = 1; save(); render(); toast('Todos los registros eliminados');
+  });
+}
+
+function startEdit(id, field) {
+  editId = id; editField = field; render();
+  setTimeout(() => {
+    const el = document.getElementById('ei-' + id + '-' + field);
+    if (el) { el.focus(); el.select(); }
+  }, 20);
+}
+function saveEdit(id, field) {
+  const el = document.getElementById('ei-' + id + '-' + field);
+  if (!el) return;
+  const v = el.value.trim();
+  const i = data.findIndex(d => d.id === id);
+  if (i >= 0) data[i][field] = v !== '' ? parseFloat(v) : null;
+  editId = null; editField = null;
+  save(); render();
+  const label = field === 'efec' ? 'Efectivo' : 'Bancario';
+  toast('✓ ' + label + ' actualizado', 'ok');
+}
+
+function openModal(id) {
+  if (id) {
+    const item = data.find(d => d.id === id); if (!item) return;
+    mMode = 'edit'; mEditId = id;
+    document.getElementById('m-title').textContent = 'Editar trabajo';
+    document.getElementById('m-save-btn').textContent = 'Guardar cambios';
+    document.getElementById('m-job').value = item.job;
+    document.getElementById('m-efec').value = item.efec !== null ? item.efec : '';
+    document.getElementById('m-banc').value = item.banc !== null ? item.banc : '';
+    document.getElementById('m-date').value = item.date;
+  } else {
+    mMode = 'new'; mEditId = null;
+    document.getElementById('m-title').textContent = 'Nuevo trabajo';
+    document.getElementById('m-save-btn').textContent = 'Guardar trabajo';
+    document.getElementById('m-job').value = '';
+    document.getElementById('m-efec').value = '';
+    document.getElementById('m-banc').value = '';
+    document.getElementById('m-date').value = today();
+  }
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(() => document.getElementById('m-job').focus(), 70);
+}
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+function closeMO(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+function saveModal() {
+  const j = document.getElementById('m-job').value.trim();
+  if (!j) { document.getElementById('m-job').focus(); toast('Escribe el trabajo realizado', 'err'); return; }
+  const e = document.getElementById('m-efec').value;
+  const b = document.getElementById('m-banc').value;
+  const d = document.getElementById('m-date').value || today();
+  if (mMode === 'edit') {
+    const i = data.findIndex(x => x.id === mEditId);
+    if (i >= 0) {
+      data[i].job = j;
+      data[i].efec = e !== '' ? parseFloat(e) : null;
+      data[i].banc = b !== '' ? parseFloat(b) : null;
+      data[i].date = d;
+    }
+    toast('✓ Trabajo actualizado', 'ok');
+  } else {
+    data.push({ id: nid++, job: j, efec: e ? parseFloat(e) : null, banc: b ? parseFloat(b) : null, date: d });
+    toast('✓ Trabajo registrado', 'ok');
+  }
+  save(); closeModal(); render();
+}
+
+function confirm2(title, msg, cb) {
+  document.getElementById('conf-title').textContent = title;
+  document.getElementById('conf-msg').textContent = msg;
+  document.getElementById('conf-ov').classList.add('open');
+  document.getElementById('conf-ok').onclick = () => { closeConfirm(); cb(); };
+}
+function closeConfirm() { document.getElementById('conf-ov').classList.remove('open'); }
+
+function setFilt(f, btn) {
+  filt = f;
+  document.querySelectorAll('.ft').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  render();
+}
+
+function render() {
+  const dates = [...new Set(data.map(d => d.date))].sort((a, b) => b.localeCompare(a));
+  const hoy = today();
+
+  const totalEfec  = data.reduce((s, d) => s + (d.efec || 0), 0);
+  const totalBanc  = data.reduce((s, d) => s + (d.banc || 0), 0);
+  const totalCobrado = totalEfec + totalBanc;
+  const hoyN       = data.filter(d => d.date === hoy).length;
+
+  document.getElementById('s-total').textContent        = data.length;
+  document.getElementById('s-tsub').textContent         = dates.length + ' día' + (dates.length !== 1 ? 's' : '');
+  document.getElementById('s-total-cobrado').textContent= 'S/ ' + totalCobrado.toFixed(2);
+  document.getElementById('s-efec').textContent         = 'S/ ' + totalEfec.toFixed(2);
+  document.getElementById('s-banc').textContent         = 'S/ ' + totalBanc.toFixed(2);
+  document.getElementById('s-hoy').textContent          = hoyN;
+  document.getElementById('s-hsub').textContent         = hoyN === 1 ? 'trabajo hoy' : 'trabajos hoy';
+
+  const fEl = document.getElementById('filtros');
+  let fh = `<button class="ft${filt === 'all' ? ' on' : ''}" onclick="setFilt('all',this)">Todos los días</button><div class="fsep"></div>`;
+  dates.forEach(f => {
+    fh += `<button class="ft${filt === f ? ' on' : ''}" onclick="setFilt('${f}',this)">${f === hoy ? '● Hoy' : shortDate(f)}</button>`;
+  });
+  fEl.innerHTML = fh;
+
+  const show = filt === 'all' ? dates : [filt];
+  const el = document.getElementById('lista');
+
+  if (!data.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">🔧</div>No hay trabajos registrados.<br>Empieza registrando el primer trabajo del día.</div>';
+    return;
+  }
+
+  let html = '';
+  show.forEach(f => {
+    const items = data.filter(d => d.date === f);
+    if (!items.length) return;
+    const totEfec = items.reduce((s, d) => s + (d.efec || 0), 0);
+    const totBanc = items.reduce((s, d) => s + (d.banc || 0), 0);
+    const totDia  = totEfec + totBanc;
+
+    html += `<div class="dg">
+      <div class="dg-head">
+        <span class="dg-name">${longDate(f)}</span>
+        <span class="dg-meta">
+          <span>${items.length} trabajos</span>
+          ${totDia > 0 ? `<span class="gold">total S/ ${totDia.toFixed(2)}</span>` : ''}
+          ${totEfec > 0 ? `<span class="g">efec. S/ ${totEfec.toFixed(2)}</span>` : ''}
+          ${totBanc > 0 ? `<span class="b">banc. S/ ${totBanc.toFixed(2)}</span>` : ''}
+        </span>
+      </div>
+      <div class="tw"><table>
+        <thead><tr>
+          <th>#</th>
+          <th>Trabajo realizado</th>
+          <th class="th-efec">Efectivo S/</th>
+          <th class="th-banc">Bancario S/</th>
+          <th class="th-total">Total S/</th>
+          <th></th>
+        </tr></thead>
+        <tbody>`;
+
+    items.forEach((item, i) => {
+      const editE = editId === item.id && editField === 'efec';
+      const editB = editId === item.id && editField === 'banc';
+      const tot   = total(item);
+      const hasPago = item.efec !== null || item.banc !== null;
+
+      html += `<tr>
+        <td class="tn">${i + 1}</td>
+        <td style="font-size:13px;color:var(--text)">${item.job}</td>
+        <td>${editE
+          ? `<input class="pi pi-efec" id="ei-${item.id}-efec" type="number" value="${item.efec || ''}" placeholder="0.00" min="0" step="0.5"
+              onkeydown="if(event.key==='Enter')saveEdit(${item.id},'efec');if(event.key==='Escape'){editId=null;editField=null;render();}"
+              onblur="saveEdit(${item.id},'efec')" />`
+          : item.efec
+            ? `<span class="cv cv-efec" onclick="startEdit(${item.id},'efec')" title="Clic para editar">S/ ${item.efec.toFixed(2)}</span>`
+            : `<span class="cv cv-empty cv-empty-efec" onclick="startEdit(${item.id},'efec')" title="Agregar efectivo">+ efectivo</span>`
+        }</td>
+        <td>${editB
+          ? `<input class="pi pi-banc" id="ei-${item.id}-banc" type="number" value="${item.banc || ''}" placeholder="0.00" min="0" step="0.5"
+              onkeydown="if(event.key==='Enter')saveEdit(${item.id},'banc');if(event.key==='Escape'){editId=null;editField=null;render();}"
+              onblur="saveEdit(${item.id},'banc')" />`
+          : item.banc
+            ? `<span class="cv cv-banc" onclick="startEdit(${item.id},'banc')" title="Clic para editar">S/ ${item.banc.toFixed(2)}</span>`
+            : `<span class="cv cv-empty cv-empty-banc" onclick="startEdit(${item.id},'banc')" title="Agregar bancario">+ bancario</span>`
+        }</td>
+        <td>${hasPago
+          ? `<span class="cv-total">S/ ${tot.toFixed(2)}</span>`
+          : `<span class="cv-pend-na">—</span>`
+        }</td>
+        <td class="ta">
+          <button class="ib e" onclick="openModal(${item.id})" title="Editar trabajo">✏</button>
+          <button class="ib d" onclick="delItem(${item.id})" title="Eliminar">✕</button>
+        </td>
+      </tr>`;
+    });
+
+    html += `</tbody></table></div></div>`;
+  });
+  el.innerHTML = html;
+}
+
+function exportPDF() {
+  const dates = [...new Set(data.map(d => d.date))].sort();
+  if (!dates.length) { toast('No hay datos para exportar', 'err'); return; }
+
+  let body = ''; let gE = 0; let gB = 0; let gN = 0;
+  dates.forEach(f => {
+    const items = data.filter(d => d.date === f);
+    const totE = items.reduce((s, d) => s + (d.efec || 0), 0);
+    const totB = items.reduce((s, d) => s + (d.banc || 0), 0);
+    const totD = totE + totB;
+    gE += totE; gB += totB; gN += items.length;
+    body += `<tr class="gr"><td colspan="5">${longDate(f)} &nbsp;·&nbsp; ${items.length} trabajos${totD > 0 ? ' &nbsp;·&nbsp; Total: <b>S/ ' + totD.toFixed(2) + '</b>' : ''}${totE > 0 ? ' &nbsp;·&nbsp; Efec: S/ ' + totE.toFixed(2) : ''}${totB > 0 ? ' &nbsp;·&nbsp; Banc: S/ ' + totB.toFixed(2) : ''}</td></tr>`;
+    items.forEach((item, i) => {
+      const tot = total(item);
+      body += `<tr>
+        <td class="n">${i + 1}</td>
+        <td>${item.job}</td>
+        <td class="e">${item.efec ? 'S/ ' + item.efec.toFixed(2) : '—'}</td>
+        <td class="b">${item.banc ? 'S/ ' + item.banc.toFixed(2) : '—'}</td>
+        <td class="t">${(item.efec || item.banc) ? 'S/ ' + tot.toFixed(2) : '—'}</td>
+      </tr>`;
+    });
+  });
+
+  const gT = gE + gB;
+  const now = new Date().toLocaleDateString('es-PE', { day:'2-digit', month:'long', year:'numeric' });
+  const html = `<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<title>RegistrosFREEDY — Reporte ${now}</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'IBM Plex Mono',monospace;background:#fff;color:#111;padding:40px;font-size:12px;}
+.hd{border-bottom:3px solid #f0a500;padding-bottom:16px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:flex-end;}
+.brand{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:800;letter-spacing:-1px;}
+.brand span{color:#f0a500;}
+.brand-sub{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-top:4px;}
+.hd-r{text-align:right;font-size:11px;color:#999;}
+.summ{display:flex;gap:14px;margin-bottom:26px;flex-wrap:wrap;}
+.sb{border:1px solid #eee;border-radius:7px;padding:11px 16px;min-width:130px;}
+.sl{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#bbb;margin-bottom:4px;}
+.sv{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;}
+.sv.gold{color:#d49200;}.sv.g{color:#16a34a;}.sv.b{color:#2563eb;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#bbb;padding:7px 10px;border-bottom:1px solid #eee;text-align:left;}
+th.th-e{color:#16a34a;}th.th-b{color:#2563eb;}th.th-t{color:#d49200;}
+td{padding:7px 10px;border-bottom:.5px solid #f5f5f5;}
+tr.gr td{background:#faf8f2;font-weight:700;font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.04em;border-top:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;}
+.n{color:#ddd;width:28px;}.e{color:#16a34a;font-weight:500;}.b{color:#2563eb;font-weight:500;}.t{color:#d49200;font-weight:700;}
+.total-row td{border-top:2px solid #111;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;}
+.footer{margin-top:26px;padding-top:12px;border-top:1px solid #eee;font-size:10px;color:#ccc;display:flex;justify-content:space-between;}
+@media print{body{padding:22px;}@page{margin:1.5cm;}}
+</style></head><body>
+<div class="hd">
+  <div>
+    <div class="brand">REGISTROS<span>FREEDY</span></div>
+    <div class="brand-sub">Reporte de trabajos del taller</div>
+  </div>
+  <div class="hd-r">Exportado el ${now}<br>${gN} trabajos</div>
+</div>
+<div class="summ">
+  <div class="sb"><div class="sl">Total trabajos</div><div class="sv">${gN}</div></div>
+  <div class="sb"><div class="sl">Total cobrado</div><div class="sv gold">S/ ${gT.toFixed(2)}</div></div>
+  <div class="sb"><div class="sl">En efectivo</div><div class="sv g">S/ ${gE.toFixed(2)}</div></div>
+  <div class="sb"><div class="sl">Bancario</div><div class="sv b">S/ ${gB.toFixed(2)}</div></div>
+</div>
+<table>
+  <thead><tr><th>#</th><th>Trabajo realizado</th><th class="th-e">Efectivo</th><th class="th-b">Bancario</th><th class="th-t">Total</th></tr></thead>
+  <tbody>
+    ${body}
+    <tr class="total-row">
+      <td></td><td><b>TOTALES</b></td>
+      <td class="e">S/ ${gE.toFixed(2)}</td>
+      <td class="b">S/ ${gB.toFixed(2)}</td>
+      <td class="t">S/ ${gT.toFixed(2)}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="footer">
+  <span>RegistrosFREEDY &copy; ${new Date().getFullYear()}</span>
+  <span>Generado: ${new Date().toLocaleString('es-PE')}</span>
+</div>
+<script>window.onload = () => { window.print(); }<\/script>
+</body></html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const win = window.open(url, '_blank');
+  if (!win) toast('Permite las ventanas emergentes para exportar', 'err');
+}
+
+let toastTimer;
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+render();
+</script>
+</body>
+</html>
