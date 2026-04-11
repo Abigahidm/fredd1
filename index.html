@@ -6,6 +6,8 @@
 <title>RegistrosFREEDY — Taller</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -183,14 +185,6 @@ tbody tr:hover{background:var(--surface2);}
   .main{padding:14px;}
   .topbar{padding:0 14px;}
   th.th-pend,td:nth-child(6){display:none;}
-}
-@media print{
-  .topbar,.form-panel,.filters,.sec-bar,.stats,.ib,.ta,.legend{display:none!important;}
-  body{background:#fff;color:#000;}
-  .main{padding:0;}
-  .dg{page-break-inside:avoid;}
-  .tw{border:1px solid #ddd;}
-  td,th{color:#000!important;}
 }
 </style>
 </head>
@@ -594,95 +588,146 @@ function render() {
   el.innerHTML = html;
 }
 
+// =====================================================
+//  EXPORTAR PDF — descarga directa sin nueva pestaña
+// =====================================================
 function exportPDF() {
-  const dates = [...new Set(data.map(d => d.date))].sort();
-  if (!dates.length) { toast('No hay datos para exportar', 'err'); return; }
+  if (!data.length) { toast('No hay datos para exportar', 'err'); return; }
 
-  let body = ''; let gE = 0; let gB = 0; let gN = 0;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const dates = [...new Set(data.map(d => d.date))].sort();
+  const gE = data.reduce((s, d) => s + (d.efec || 0), 0);
+  const gB = data.reduce((s, d) => s + (d.banc || 0), 0);
+  const gT = gE + gB;
+  const now = new Date().toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' });
+
+  // — Encabezado con barra dorada —
+  doc.setFillColor(240, 165, 0);
+  doc.rect(0, 0, 210, 24, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(20);
+  doc.setTextColor(0, 0, 0);
+  doc.text('REGISTROS', 14, 15);
+  // Medir ancho de "REGISTROS" para posicionar "FREDDY" a continuación
+  const rw = doc.getTextWidth('REGISTROS');
+  doc.setTextColor(80, 40, 0);
+  doc.text('FREDDY', 14 + rw + 1.5, 15);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(60, 40, 0);
+  doc.text('Reporte de trabajos del taller', 14, 21);
+  doc.setTextColor(60, 40, 0);
+  doc.text('Exportado: ' + now + '   ·   ' + data.length + ' trabajos', 196, 21, { align: 'right' });
+
+  // — Tarjetas de resumen —
+  let y = 32;
+  const boxes = [
+    { label: 'Total trabajos', value: String(data.length),    fill: [245,245,245], txt: [50,50,50] },
+    { label: 'Total cobrado',  value: 'S/ '+gT.toFixed(2),   fill: [255,243,205], txt: [130,90,0] },
+    { label: 'En efectivo',    value: 'S/ '+gE.toFixed(2),   fill: [209,250,229], txt: [20,120,50] },
+    { label: 'Bancario',       value: 'S/ '+gB.toFixed(2),   fill: [219,234,254], txt: [30,80,200] },
+  ];
+  const bw = 43, bh = 17, bx = 14, gap = 3;
+  boxes.forEach((b, i) => {
+    const x = bx + i * (bw + gap);
+    doc.setFillColor(...b.fill);
+    doc.roundedRect(x, y, bw, bh, 2, 2, 'F');
+    doc.setFontSize(7.5);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(120, 120, 120);
+    doc.text(b.label, x + 3, y + 6);
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...b.txt);
+    doc.text(b.value, x + 3, y + 14);
+  });
+  y += bh + 8;
+
+  // — Filas de la tabla —
+  const tableBody = [];
   dates.forEach(f => {
     const items = data.filter(d => d.date === f);
     const totE = items.reduce((s, d) => s + (d.efec || 0), 0);
     const totB = items.reduce((s, d) => s + (d.banc || 0), 0);
     const totD = totE + totB;
-    gE += totE; gB += totB; gN += items.length;
-    body += `<tr class="gr"><td colspan="5">${longDate(f)} &nbsp;·&nbsp; ${items.length} trabajos${totD > 0 ? ' &nbsp;·&nbsp; Total: <b>S/ ' + totD.toFixed(2) + '</b>' : ''}${totE > 0 ? ' &nbsp;·&nbsp; Efec: S/ ' + totE.toFixed(2) : ''}${totB > 0 ? ' &nbsp;·&nbsp; Banc: S/ ' + totB.toFixed(2) : ''}</td></tr>`;
+    const label = new Date(f + 'T12:00:00').toLocaleDateString('es-PE', {
+      weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
+    }).replace(/^\w/, c => c.toUpperCase());
+
+    const metaParts = [label + '   ·   ' + items.length + ' trabajos'];
+    if (totD > 0) metaParts.push('Total: S/ ' + totD.toFixed(2));
+    if (totE > 0) metaParts.push('Efec: S/ ' + totE.toFixed(2));
+    if (totB > 0) metaParts.push('Banc: S/ ' + totB.toFixed(2));
+
+    tableBody.push([{
+      content: metaParts.join('   ·   '),
+      colSpan: 5,
+      styles: { fillColor: [250, 247, 235], textColor: [100, 75, 10], fontStyle: 'bold', fontSize: 8, cellPadding: { top: 5, bottom: 5, left: 4, right: 4 } }
+    }]);
+
     items.forEach((item, i) => {
       const tot = total(item);
-      body += `<tr>
-        <td class="n">${i + 1}</td>
-        <td>${item.job}</td>
-        <td class="e">${item.efec ? 'S/ ' + item.efec.toFixed(2) : '—'}</td>
-        <td class="b">${item.banc ? 'S/ ' + item.banc.toFixed(2) : '—'}</td>
-        <td class="t">${(item.efec || item.banc) ? 'S/ ' + tot.toFixed(2) : '—'}</td>
-      </tr>`;
+      tableBody.push([
+        { content: String(i + 1), styles: { textColor: [190,190,190], halign: 'right', fontSize: 8 } },
+        { content: item.job, styles: { textColor: [30,30,30] } },
+        { content: item.efec ? 'S/ ' + item.efec.toFixed(2) : '—', styles: { textColor: item.efec ? [22,163,74] : [190,190,190], halign: 'right', fontStyle: item.efec ? 'bold' : 'normal' } },
+        { content: item.banc ? 'S/ ' + item.banc.toFixed(2) : '—', styles: { textColor: item.banc ? [37,99,235] : [190,190,190], halign: 'right', fontStyle: item.banc ? 'bold' : 'normal' } },
+        { content: (item.efec || item.banc) ? 'S/ ' + tot.toFixed(2) : '—', styles: { textColor: (item.efec || item.banc) ? [180,130,0] : [190,190,190], halign: 'right', fontStyle: (item.efec || item.banc) ? 'bold' : 'normal' } },
+      ]);
     });
   });
 
-  const gT = gE + gB;
-  const now = new Date().toLocaleDateString('es-PE', { day:'2-digit', month:'long', year:'numeric' });
-  const html = `<!DOCTYPE html>
-<html lang="es"><head><meta charset="UTF-8">
-<title>RegistrosFREEDY — Reporte ${now}</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet"/>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'IBM Plex Mono',monospace;background:#fff;color:#111;padding:40px;font-size:12px;}
-.hd{border-bottom:3px solid #f0a500;padding-bottom:16px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:flex-end;}
-.brand{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:800;letter-spacing:-1px;}
-.brand span{color:#f0a500;}
-.brand-sub{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-top:4px;}
-.hd-r{text-align:right;font-size:11px;color:#999;}
-.summ{display:flex;gap:14px;margin-bottom:26px;flex-wrap:wrap;}
-.sb{border:1px solid #eee;border-radius:7px;padding:11px 16px;min-width:130px;}
-.sl{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#bbb;margin-bottom:4px;}
-.sv{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;}
-.sv.gold{color:#d49200;}.sv.g{color:#16a34a;}.sv.b{color:#2563eb;}
-table{width:100%;border-collapse:collapse;}
-th{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:#bbb;padding:7px 10px;border-bottom:1px solid #eee;text-align:left;}
-th.th-e{color:#16a34a;}th.th-b{color:#2563eb;}th.th-t{color:#d49200;}
-td{padding:7px 10px;border-bottom:.5px solid #f5f5f5;}
-tr.gr td{background:#faf8f2;font-weight:700;font-size:11px;color:#555;text-transform:uppercase;letter-spacing:.04em;border-top:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;}
-.n{color:#ddd;width:28px;}.e{color:#16a34a;font-weight:500;}.b{color:#2563eb;font-weight:500;}.t{color:#d49200;font-weight:700;}
-.total-row td{border-top:2px solid #111;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;}
-.footer{margin-top:26px;padding-top:12px;border-top:1px solid #eee;font-size:10px;color:#ccc;display:flex;justify-content:space-between;}
-@media print{body{padding:22px;}@page{margin:1.5cm;}}
-</style></head><body>
-<div class="hd">
-  <div>
-    <div class="brand">REGISTROS<span>FREEDY</span></div>
-    <div class="brand-sub">Reporte de trabajos del taller</div>
-  </div>
-  <div class="hd-r">Exportado el ${now}<br>${gN} trabajos</div>
-</div>
-<div class="summ">
-  <div class="sb"><div class="sl">Total trabajos</div><div class="sv">${gN}</div></div>
-  <div class="sb"><div class="sl">Total cobrado</div><div class="sv gold">S/ ${gT.toFixed(2)}</div></div>
-  <div class="sb"><div class="sl">En efectivo</div><div class="sv g">S/ ${gE.toFixed(2)}</div></div>
-  <div class="sb"><div class="sl">Bancario</div><div class="sv b">S/ ${gB.toFixed(2)}</div></div>
-</div>
-<table>
-  <thead><tr><th>#</th><th>Trabajo realizado</th><th class="th-e">Efectivo</th><th class="th-b">Bancario</th><th class="th-t">Total</th></tr></thead>
-  <tbody>
-    ${body}
-    <tr class="total-row">
-      <td></td><td><b>TOTALES</b></td>
-      <td class="e">S/ ${gE.toFixed(2)}</td>
-      <td class="b">S/ ${gB.toFixed(2)}</td>
-      <td class="t">S/ ${gT.toFixed(2)}</td>
-    </tr>
-  </tbody>
-</table>
-<div class="footer">
-  <span>RegistrosFREEDY &copy; ${new Date().getFullYear()}</span>
-  <span>Generado: ${new Date().toLocaleString('es-PE')}</span>
-</div>
-<script>window.onload = () => { window.print(); }<\/script>
-</body></html>`;
+  // Fila de totales finales
+  tableBody.push([
+    { content: '', styles: { fillColor: [25,25,25] } },
+    { content: 'TOTALES', styles: { fillColor: [25,25,25], textColor: [240,165,0], fontStyle: 'bold', fontSize: 10 } },
+    { content: 'S/ ' + gE.toFixed(2), styles: { fillColor: [25,25,25], textColor: [74,222,128], fontStyle: 'bold', halign: 'right' } },
+    { content: 'S/ ' + gB.toFixed(2), styles: { fillColor: [25,25,25], textColor: [147,197,253], fontStyle: 'bold', halign: 'right' } },
+    { content: 'S/ ' + gT.toFixed(2), styles: { fillColor: [25,25,25], textColor: [253,200,60], fontStyle: 'bold', halign: 'right', fontSize: 11 } },
+  ]);
 
-  const blob = new Blob([html], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const win = window.open(url, '_blank');
-  if (!win) toast('Permite las ventanas emergentes para exportar', 'err');
+  doc.autoTable({
+    startY: y,
+    head: [[
+      { content: '#', styles: { halign: 'right', textColor: [150,150,150] } },
+      { content: 'Trabajo realizado', styles: { textColor: [80,80,80] } },
+      { content: 'Efectivo', styles: { textColor: [22,163,74], halign: 'right' } },
+      { content: 'Bancario', styles: { textColor: [37,99,235], halign: 'right' } },
+      { content: 'Total', styles: { textColor: [180,130,0], halign: 'right' } },
+    ]],
+    body: tableBody,
+    styles: { fontSize: 9, cellPadding: 4, font: 'helvetica', lineColor: [230,230,230], lineWidth: 0.2 },
+    headStyles: { fillColor: [245,245,245], textColor: [80,80,80], fontStyle: 'bold', fontSize: 9, lineWidth: 0 },
+    columnStyles: {
+      0: { cellWidth: 10 },
+      2: { cellWidth: 28 },
+      3: { cellWidth: 28 },
+      4: { cellWidth: 30 }
+    },
+    margin: { left: 14, right: 14 },
+    theme: 'plain',
+    rowPageBreak: 'auto',
+  });
+
+  // — Pie de página en cada hoja —
+  const pageCount = doc.internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setDrawColor(220, 220, 220);
+    doc.line(14, 287, 196, 287);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(180, 180, 180);
+    doc.text('RegistrosFREDDY  ©  ' + new Date().getFullYear() + '   ·   Reporte generado: ' + new Date().toLocaleString('es-PE'), 14, 292);
+    doc.text('Pág. ' + i + ' / ' + pageCount, 196, 292, { align: 'right' });
+  }
+
+  // — Descargar directamente —
+  const filename = 'RegistrosFREDDY_' + new Date().toISOString().split('T')[0] + '.pdf';
+  doc.save(filename);
+  toast('✓ PDF descargado', 'ok');
 }
 
 let toastTimer;
