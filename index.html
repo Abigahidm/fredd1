@@ -31,6 +31,9 @@
   --orange-dim:#1a0e00;
   --red:#ef4444;
   --red-dim:#1a0707;
+  --purple:#a78bfa;
+  --purple-dim:#1a1030;
+  --purple-border:#3a2a5f;
   --text:#f0f0f0;
   --text2:#aaa;
   --text3:#555;
@@ -54,17 +57,18 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .tbtn-danger{color:var(--red);border-color:var(--red-dim);}
 .tbtn-danger:hover{background:var(--red-dim);color:var(--red);}
 
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border);flex-shrink:0;}
-.stat{background:var(--surface);padding:16px 20px;}
-.stat-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:6px;}
-.stat-v{font-family:var(--mono);font-size:22px;font-weight:500;color:var(--text);line-height:1;}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border);flex-shrink:0;}
+.stat{background:var(--surface);padding:14px 18px;}
+.stat-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:5px;}
+.stat-v{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--text);line-height:1;}
 .stat-v.gold{color:var(--gold);}
 .stat-v.blue{color:var(--blue2);}
 .stat-v.orange{color:var(--orange2);}
 .stat-v.green{color:var(--green);}
-.stat-sub{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:5px;}
+.stat-v.purple{color:var(--purple);}
+.stat-sub{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px;}
 
-.main{flex:1;max-width:1200px;width:100%;margin:0 auto;padding:22px;}
+.main{flex:1;max-width:1280px;width:100%;margin:0 auto;padding:20px;}
 
 .form-panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:20px;}
 .panel-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:13px;display:flex;align-items:center;gap:8px;}
@@ -102,6 +106,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .dg-meta .b{color:var(--blue2);}
 .dg-meta .o{color:var(--orange2);}
 .dg-meta .gold{color:var(--gold2);}
+.dg-meta .p{color:var(--purple);}
 
 .tw{border:1px solid var(--border);border-radius:9px;overflow:hidden;}
 table{width:100%;border-collapse:collapse;}
@@ -109,7 +114,7 @@ thead{background:var(--surface2);}
 th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);}
 th.th-efec{color:var(--green);opacity:.85;}
 th.th-banc{color:var(--blue);opacity:.8;}
-th.th-pend{color:var(--orange);opacity:.7;}
+th.th-prod{color:var(--purple);opacity:.85;}
 th.th-total{color:var(--gold);opacity:.85;}
 td{padding:9px 13px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
 tbody tr:last-child td{border-bottom:none;}
@@ -122,12 +127,13 @@ tbody tr:hover{background:var(--surface2);}
 .cv-efec:hover{border-color:#1e3a1e;background:var(--green-dim);}
 .cv-banc{color:var(--blue2);}
 .cv-banc:hover{border-color:var(--blue-border);background:var(--blue-dim);}
+.cv-prod{color:var(--purple);}
+.cv-prod:hover{border-color:var(--purple-border);background:var(--purple-dim);}
 .cv-total{color:var(--gold2);font-weight:500;}
 .cv-empty{color:var(--text3);border:1px dashed var(--border);font-style:italic;}
 .cv-empty-efec:hover{border-color:var(--green);color:var(--green);background:var(--green-dim);}
 .cv-empty-banc:hover{border-color:var(--blue);color:var(--blue2);background:var(--blue-dim);}
-.cv-pend-pos{font-family:var(--mono);font-size:13px;color:var(--orange2);}
-.cv-pend-zero{font-family:var(--mono);font-size:13px;color:var(--green);}
+.cv-empty-prod:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-dim);}
 .cv-pend-na{font-family:var(--mono);font-size:13px;color:var(--text3);}
 .pi{font-family:var(--mono);font-size:12px;padding:5px 9px;border-radius:5px;width:115px;}
 .pi:focus{outline:none;}
@@ -138,13 +144,21 @@ tbody tr:hover{background:var(--surface2);}
 .ib:hover{background:var(--surface3);color:var(--text);}
 .ib.d:hover{color:var(--red);background:var(--red-dim);}
 .ib.e:hover{color:var(--gold2);background:var(--gold-dim);}
+.ib.p:hover{color:var(--purple);background:var(--purple-dim);}
+
+/* Productos inline badge */
+.prod-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;background:var(--purple-dim);border:1px solid var(--purple-border);color:var(--purple);border-radius:5px;padding:2px 8px;margin:2px 3px 2px 0;}
+.prod-list{display:flex;flex-wrap:wrap;align-items:center;gap:2px;}
+.prod-none{font-family:var(--mono);font-size:11px;color:var(--text3);border:1px dashed var(--border);border-radius:5px;padding:2px 8px;cursor:pointer;transition:all .1s;}
+.prod-none:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-dim);}
 
 .empty{text-align:center;padding:52px 20px;color:var(--text3);font-size:13px;border:1px dashed var(--border);border-radius:10px;}
 .empty-icon{font-size:32px;margin-bottom:10px;opacity:.4;}
 
+/* MODAL */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;align-items:center;justify-content:center;padding:20px;}
 .overlay.open{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border2);border-radius:13px;padding:26px;width:460px;max-width:100%;box-shadow:0 30px 80px rgba(0,0,0,.6);}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:13px;padding:26px;width:500px;max-width:100%;box-shadow:0 30px 80px rgba(0,0,0,.6);max-height:90vh;overflow-y:auto;}
 .modal-title{font-weight:700;font-size:17px;margin-bottom:18px;}
 .mf{margin-bottom:14px;}
 .mf label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);margin-bottom:6px;}
@@ -160,6 +174,28 @@ tbody tr:hover{background:var(--surface2);}
 .mb-s{background:var(--gold);color:#000;border-color:var(--gold);font-weight:700;}
 .mb-s:hover{background:#d49200;}
 
+/* Sección productos en modal */
+.prod-section{border:1px solid var(--purple-border);border-radius:9px;background:var(--purple-dim);padding:14px;margin-bottom:14px;}
+.prod-section-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple);margin-bottom:11px;display:flex;align-items:center;gap:6px;}
+.prod-section-lbl::before{content:'';width:3px;height:11px;background:var(--purple);border-radius:2px;}
+.prod-item-row{display:grid;grid-template-columns:1fr 100px 28px;gap:6px;margin-bottom:7px;align-items:center;}
+.prod-item-row:last-child{margin-bottom:0;}
+.fi-prod{border-color:var(--purple-border);}
+.fi-prod:focus{border-color:var(--purple);}
+.prod-total-row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--purple-border);}
+.prod-total-lbl{font-family:var(--mono);font-size:11px;color:var(--purple);}
+.prod-total-val{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--purple);}
+.btn-add-prod{font-family:var(--sans);font-size:12px;font-weight:600;padding:7px 14px;border-radius:7px;cursor:pointer;background:transparent;color:var(--purple);border:1px dashed var(--purple-border);transition:all .15s;width:100%;margin-top:8px;}
+.btn-add-prod:hover{background:var(--purple-dim);border-style:solid;}
+.btn-del-prod{background:transparent;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:3px 5px;border-radius:4px;transition:all .1s;line-height:1;}
+.btn-del-prod:hover{color:var(--red);background:var(--red-dim);}
+
+/* Modal productos standalone */
+.prod-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:250;align-items:center;justify-content:center;padding:20px;}
+.prod-overlay.open{display:flex;}
+.prod-modal{background:var(--surface);border:1px solid var(--border2);border-radius:13px;padding:26px;width:460px;max-width:100%;box-shadow:0 30px 80px rgba(0,0,0,.6);max-height:88vh;overflow-y:auto;}
+
+/* Confirm */
 .confirm-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:300;align-items:center;justify-content:center;padding:20px;}
 .confirm-ov.open{display:flex;}
 .cbox{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:24px;width:360px;max-width:100%;}
@@ -175,16 +211,17 @@ tbody tr:hover{background:var(--surface2);}
 .toast.ok{border-color:var(--green);color:var(--green);}
 .toast.err{border-color:var(--red);color:var(--red);}
 
-@media(max-width:900px){
-  .stats{grid-template-columns:repeat(2,1fr);}
-  .stats .stat:last-child{grid-column:1/-1;}
+@media(max-width:1000px){
+  .stats{grid-template-columns:repeat(3,1fr);}
   .form-row{grid-template-columns:1fr 1fr;}
   .form-row input:first-child{grid-column:1/-1;}
   .form-row .fi-add{grid-column:1/-1;}
   .hd-center{display:none;}
   .main{padding:14px;}
   .topbar{padding:0 14px;}
-  th.th-pend,td:nth-child(6){display:none;}
+}
+@media(max-width:680px){
+  .stats{grid-template-columns:repeat(2,1fr);}
 }
 </style>
 </head>
@@ -211,7 +248,7 @@ tbody tr:hover{background:var(--surface2);}
   <div class="stat">
     <div class="stat-l">Total cobrado</div>
     <div class="stat-v gold" id="s-total-cobrado">S/ 0.00</div>
-    <div class="stat-sub">efectivo + bancario</div>
+    <div class="stat-sub">mano de obra total</div>
   </div>
   <div class="stat">
     <div class="stat-l">Efectivo</div>
@@ -222,6 +259,11 @@ tbody tr:hover{background:var(--surface2);}
     <div class="stat-l">Bancario</div>
     <div class="stat-v blue" id="s-banc">S/ 0.00</div>
     <div class="stat-sub">transferencias / yape</div>
+  </div>
+  <div class="stat">
+    <div class="stat-l">Productos</div>
+    <div class="stat-v purple" id="s-prod">S/ 0.00</div>
+    <div class="stat-sub">materiales usados</div>
   </div>
   <div class="stat">
     <div class="stat-l">Hoy</div>
@@ -246,7 +288,8 @@ tbody tr:hover{background:var(--surface2);}
   <div class="legend">
     <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>Pago en efectivo</div>
     <div class="leg"><div class="leg-dot" style="background:var(--blue2)"></div>Pago bancario (Yape/transfer)</div>
-    <div class="leg"><div class="leg-dot" style="background:var(--gold2)"></div>Total cobrado (efectivo + bancario)</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--purple)"></div>Productos / materiales usados</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--gold2)"></div>Total mano de obra</div>
   </div>
 
   <div class="sec-bar">
@@ -261,7 +304,7 @@ tbody tr:hover{background:var(--surface2);}
   <div id="lista"></div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL TRABAJO -->
 <div class="overlay" id="overlay" onclick="closeMO(event)">
   <div class="modal">
     <div class="modal-title" id="m-title">Nuevo trabajo</div>
@@ -270,7 +313,7 @@ tbody tr:hover{background:var(--surface2);}
       <input class="fi" style="width:100%" type="text" id="m-job" placeholder="Descripción del trabajo..." />
     </div>
     <div class="mf">
-      <label>Forma de pago</label>
+      <label>Forma de pago (mano de obra)</label>
       <div class="mf-row">
         <div>
           <input class="fi fi-efec-m" style="width:100%" type="number" id="m-efec" placeholder="0.00 — Efectivo" min="0" step="0.50" />
@@ -282,6 +325,18 @@ tbody tr:hover{background:var(--surface2);}
         </div>
       </div>
     </div>
+
+    <!-- SECCIÓN PRODUCTOS -->
+    <div class="prod-section">
+      <div class="prod-section-lbl">Productos / materiales usados</div>
+      <div id="m-prod-list"></div>
+      <button class="btn-add-prod" onclick="addProdRow()">+ Agregar producto</button>
+      <div class="prod-total-row" id="m-prod-total-row" style="display:none">
+        <span class="prod-total-lbl">Total productos</span>
+        <span class="prod-total-val" id="m-prod-total">S/ 0.00</span>
+      </div>
+    </div>
+
     <div class="mf">
       <label>Fecha</label>
       <input class="fi" style="width:100%" type="date" id="m-date" />
@@ -289,6 +344,26 @@ tbody tr:hover{background:var(--surface2);}
     <div class="ma">
       <button class="mb" onclick="closeModal()">Cancelar</button>
       <button class="mb mb-s" id="m-save-btn" onclick="saveModal()">Guardar trabajo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRODUCTOS STANDALONE (editar productos de trabajo existente) -->
+<div class="prod-overlay" id="prod-overlay" onclick="closeProdMO(event)">
+  <div class="prod-modal">
+    <div class="modal-title" id="pm-title">Productos del trabajo</div>
+    <div class="prod-section" style="margin-bottom:0">
+      <div class="prod-section-lbl">Productos / materiales usados</div>
+      <div id="pm-prod-list"></div>
+      <button class="btn-add-prod" onclick="addProdRowPM()">+ Agregar producto</button>
+      <div class="prod-total-row" id="pm-prod-total-row" style="display:none">
+        <span class="prod-total-lbl">Total productos</span>
+        <span class="prod-total-val" id="pm-prod-total">S/ 0.00</span>
+      </div>
+    </div>
+    <div class="ma">
+      <button class="mb" onclick="closeProdModal()">Cancelar</button>
+      <button class="mb mb-s" onclick="saveProdModal()">Guardar productos</button>
     </div>
   </div>
 </div>
@@ -309,38 +384,51 @@ tbody tr:hover{background:var(--surface2);}
 
 <script>
 const INIT_DATA = [
-  {id:1,  job:'Camioneta Hilux',                              efec:null, banc:null, date:'2026-04-01'},
-  {id:2,  job:'Camioneta Hilux',                              efec:null, banc:null, date:'2026-04-01'},
-  {id:3,  job:'Cambio de aceite motocarga',                   efec:null, banc:null, date:'2026-04-01'},
-  {id:4,  job:'Cambio de aceite Nissan',                      efec:null, banc:null, date:'2026-04-01'},
-  {id:5,  job:'Cambio de aceite',                             efec:null, banc:null, date:'2026-04-02'},
-  {id:6,  job:'Cambio de aceite camion Isuzu',                efec:null, banc:null, date:'2026-04-02'},
-  {id:7,  job:'Motor y corona',                               efec:null, banc:null, date:'2026-04-02'},
-  {id:8,  job:'Afinamiento',                                  efec:null, banc:null, date:'2026-04-02'},
-  {id:9,  job:'Cambio de aceite Toyota',                      efec:null, banc:null, date:'2026-04-02'},
-  {id:10, job:'Cambio de aceite combi',                       efec:null, banc:null, date:'2026-04-02'},
-  {id:11, job:'Filtros',                                      efec:null, banc:null, date:'2026-04-04'},
-  {id:12, job:'Rodamientos delanteros camioneta',             efec:null, banc:null, date:'2026-04-04'},
-  {id:13, job:'Suspensión',                                   efec:null, banc:null, date:'2026-04-04'},
-  {id:14, job:'Cambio de aceite camion',                      efec:null, banc:null, date:'2026-04-04'},
-  {id:15, job:'Sistema eléctrico',                            efec:null, banc:null, date:'2026-04-04'},
-  {id:16, job:'Mantenimiento suspensión general (Volkswagen)',efec:null, banc:null, date:'2026-04-06'},
-  {id:17, job:'Sistema eléctrico luces',                      efec:null, banc:null, date:'2026-04-06'},
-  {id:18, job:'Diagnóstico Hyundai',                         efec:20,   banc:null, date:'2026-04-06'},
-  {id:19, job:'Diagnóstico alineamiento',                     efec:10,   banc:null, date:'2026-04-06'},
-  {id:20, job:'Cambio de rodamientos',                        efec:null, banc:null, date:'2026-04-07'},
-  {id:21, job:'Purgado de ATF (Yaris)',                       efec:null, banc:null, date:'2026-04-07'},
+  {id:1,  job:'Camioneta Hilux',                              efec:null, banc:null, date:'2026-04-01', products:[]},
+  {id:2,  job:'Camioneta Hilux',                              efec:null, banc:null, date:'2026-04-01', products:[]},
+  {id:3,  job:'Cambio de aceite motocarga',                   efec:null, banc:null, date:'2026-04-01', products:[]},
+  {id:4,  job:'Cambio de aceite Nissan',                      efec:null, banc:null, date:'2026-04-01', products:[]},
+  {id:5,  job:'Cambio de aceite',                             efec:null, banc:null, date:'2026-04-02', products:[]},
+  {id:6,  job:'Cambio de aceite camion Isuzu',                efec:null, banc:null, date:'2026-04-02', products:[]},
+  {id:7,  job:'Motor y corona',                               efec:null, banc:null, date:'2026-04-02', products:[]},
+  {id:8,  job:'Afinamiento',                                  efec:null, banc:null, date:'2026-04-02', products:[]},
+  {id:9,  job:'Cambio de aceite Toyota',                      efec:null, banc:null, date:'2026-04-02', products:[]},
+  {id:10, job:'Cambio de aceite combi',                       efec:null, banc:null, date:'2026-04-02', products:[]},
+  {id:11, job:'Filtros',                                      efec:null, banc:null, date:'2026-04-04', products:[]},
+  {id:12, job:'Rodamientos delanteros camioneta',             efec:null, banc:null, date:'2026-04-04', products:[]},
+  {id:13, job:'Suspensión',                                   efec:null, banc:null, date:'2026-04-04', products:[]},
+  {id:14, job:'Cambio de aceite camion',                      efec:null, banc:null, date:'2026-04-04', products:[]},
+  {id:15, job:'Sistema eléctrico',                            efec:null, banc:null, date:'2026-04-04', products:[]},
+  {id:16, job:'Mantenimiento suspensión general (Volkswagen)',efec:null, banc:null, date:'2026-04-06', products:[]},
+  {id:17, job:'Sistema eléctrico luces',                      efec:null, banc:null, date:'2026-04-06', products:[]},
+  {id:18, job:'Diagnóstico Hyundai',                         efec:20,   banc:null, date:'2026-04-06', products:[]},
+  {id:19, job:'Diagnóstico alineamiento',                     efec:10,   banc:null, date:'2026-04-06', products:[]},
+  {id:20, job:'Cambio de rodamientos',                        efec:null, banc:null, date:'2026-04-07', products:[]},
+  {id:21, job:'Purgado de ATF (Yaris)',                       efec:null, banc:null, date:'2026-04-07', products:[]},
 ];
 
-const KEY = 'tallerpro_v5';
+const KEY = 'tallerpro_v6';
 let data = JSON.parse(localStorage.getItem(KEY) || 'null');
-if (!data) { data = JSON.parse(JSON.stringify(INIT_DATA)); save(); }
+if (!data) {
+  // migrar desde versión anterior si existe
+  const old = JSON.parse(localStorage.getItem('tallerpro_v5') || 'null');
+  if (old) {
+    data = old.map(d => ({...d, products: d.products || []}));
+  } else {
+    data = JSON.parse(JSON.stringify(INIT_DATA));
+  }
+  save();
+}
+// asegurar campo products en registros viejos
+data = data.map(d => ({...d, products: d.products || []}));
+
 let nid = data.length ? Math.max(...data.map(d => d.id)) + 1 : 1;
 let filt = 'all';
 let editId = null;
 let editField = null;
 let mMode = 'new';
 let mEditId = null;
+let pmEditId = null;
 
 function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
 function today() { return new Date().toISOString().split('T')[0]; }
@@ -354,9 +442,9 @@ function shortDate(f) {
     day:'2-digit', month:'2-digit', year:'numeric'
   });
 }
-function total(item) {
-  return (item.efec || 0) + (item.banc || 0);
-}
+function totalMO(item) { return (item.efec || 0) + (item.banc || 0); }
+function totalProd(item) { return (item.products || []).reduce((s, p) => s + (p.price || 0), 0); }
+function totalItem(item) { return totalMO(item) + totalProd(item); }
 
 document.getElementById('q-date').value = today();
 document.getElementById('m-date').value = today();
@@ -365,15 +453,16 @@ document.getElementById('hdr-date').textContent = new Date().toLocaleDateString(
 }).replace(/^\w/, c => c.toUpperCase());
 
 document.getElementById('q-job').addEventListener('keydown', e => { if (e.key === 'Enter') quickAdd(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeConfirm(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeProdModal(); closeConfirm(); } });
 
+/* ─── CRUD TRABAJOS ─── */
 function quickAdd() {
   const j = document.getElementById('q-job').value.trim();
   if (!j) { document.getElementById('q-job').focus(); toast('Escribe el trabajo realizado', 'err'); return; }
   const e = document.getElementById('q-efec').value;
   const b = document.getElementById('q-banc').value;
   const d = document.getElementById('q-date').value || today();
-  data.push({ id: nid++, job: j, efec: e ? parseFloat(e) : null, banc: b ? parseFloat(b) : null, date: d });
+  data.push({ id: nid++, job: j, efec: e ? parseFloat(e) : null, banc: b ? parseFloat(b) : null, date: d, products: [] });
   save();
   document.getElementById('q-job').value = '';
   document.getElementById('q-efec').value = '';
@@ -406,6 +495,7 @@ function confirmClearAll() {
   });
 }
 
+/* ─── EDICIÓN INLINE EFEC/BANC ─── */
 function startEdit(id, field) {
   editId = id; editField = field; render();
   setTimeout(() => {
@@ -421,8 +511,49 @@ function saveEdit(id, field) {
   if (i >= 0) data[i][field] = v !== '' ? parseFloat(v) : null;
   editId = null; editField = null;
   save(); render();
-  const label = field === 'efec' ? 'Efectivo' : 'Bancario';
-  toast('✓ ' + label + ' actualizado', 'ok');
+  toast('✓ ' + (field === 'efec' ? 'Efectivo' : 'Bancario') + ' actualizado', 'ok');
+}
+
+/* ─── MODAL TRABAJO ─── */
+let mProds = []; // productos temporales en el modal
+
+function addProdRow() {
+  mProds.push({ name: '', price: 0 });
+  renderModalProds();
+}
+
+function removeProdRow(i) {
+  mProds.splice(i, 1);
+  renderModalProds();
+}
+
+function renderModalProds() {
+  const container = document.getElementById('m-prod-list');
+  const totalRow = document.getElementById('m-prod-total-row');
+  if (!mProds.length) {
+    container.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:4px 0 8px;">Sin productos aún. Usa el botón de abajo para agregar.</div>';
+    totalRow.style.display = 'none';
+    return;
+  }
+  let html = '';
+  mProds.forEach((p, i) => {
+    html += `<div class="prod-item-row">
+      <input class="fi fi-prod" type="text" placeholder="Nombre del producto" value="${escHtml(p.name)}"
+        oninput="mProds[${i}].name=this.value" style="font-size:12px;padding:8px 10px;" />
+      <input class="fi fi-prod" type="number" placeholder="S/ precio" value="${p.price || ''}" min="0" step="0.50"
+        oninput="mProds[${i}].price=parseFloat(this.value)||0;updateModalProdTotal()" style="font-size:12px;padding:8px 10px;" />
+      <button class="btn-del-prod" onclick="removeProdRow(${i})" title="Quitar">✕</button>
+    </div>`;
+  });
+  container.innerHTML = html;
+  updateModalProdTotal();
+}
+
+function updateModalProdTotal() {
+  const t = mProds.reduce((s, p) => s + (p.price || 0), 0);
+  const row = document.getElementById('m-prod-total-row');
+  row.style.display = mProds.length ? 'flex' : 'none';
+  document.getElementById('m-prod-total').textContent = 'S/ ' + t.toFixed(2);
 }
 
 function openModal(id) {
@@ -435,6 +566,7 @@ function openModal(id) {
     document.getElementById('m-efec').value = item.efec !== null ? item.efec : '';
     document.getElementById('m-banc').value = item.banc !== null ? item.banc : '';
     document.getElementById('m-date').value = item.date;
+    mProds = JSON.parse(JSON.stringify(item.products || []));
   } else {
     mMode = 'new'; mEditId = null;
     document.getElementById('m-title').textContent = 'Nuevo trabajo';
@@ -443,34 +575,90 @@ function openModal(id) {
     document.getElementById('m-efec').value = '';
     document.getElementById('m-banc').value = '';
     document.getElementById('m-date').value = today();
+    mProds = [];
   }
+  renderModalProds();
   document.getElementById('overlay').classList.add('open');
   setTimeout(() => document.getElementById('m-job').focus(), 70);
 }
 function closeModal() { document.getElementById('overlay').classList.remove('open'); }
 function closeMO(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+
 function saveModal() {
   const j = document.getElementById('m-job').value.trim();
   if (!j) { document.getElementById('m-job').focus(); toast('Escribe el trabajo realizado', 'err'); return; }
   const e = document.getElementById('m-efec').value;
   const b = document.getElementById('m-banc').value;
   const d = document.getElementById('m-date').value || today();
+  const prods = mProds.filter(p => p.name.trim());
   if (mMode === 'edit') {
     const i = data.findIndex(x => x.id === mEditId);
-    if (i >= 0) {
-      data[i].job = j;
-      data[i].efec = e !== '' ? parseFloat(e) : null;
-      data[i].banc = b !== '' ? parseFloat(b) : null;
-      data[i].date = d;
-    }
+    if (i >= 0) { data[i].job = j; data[i].efec = e !== '' ? parseFloat(e) : null; data[i].banc = b !== '' ? parseFloat(b) : null; data[i].date = d; data[i].products = prods; }
     toast('✓ Trabajo actualizado', 'ok');
   } else {
-    data.push({ id: nid++, job: j, efec: e ? parseFloat(e) : null, banc: b ? parseFloat(b) : null, date: d });
+    data.push({ id: nid++, job: j, efec: e ? parseFloat(e) : null, banc: b ? parseFloat(b) : null, date: d, products: prods });
     toast('✓ Trabajo registrado', 'ok');
   }
   save(); closeModal(); render();
 }
 
+/* ─── MODAL PRODUCTOS STANDALONE ─── */
+let pmProds = [];
+
+function openProdModal(id) {
+  const item = data.find(d => d.id === id); if (!item) return;
+  pmEditId = id;
+  document.getElementById('pm-title').textContent = '📦 Productos — ' + item.job;
+  pmProds = JSON.parse(JSON.stringify(item.products || []));
+  renderPMProds();
+  document.getElementById('prod-overlay').classList.add('open');
+}
+function closeProdModal() { document.getElementById('prod-overlay').classList.remove('open'); }
+function closeProdMO(e) { if (e.target === document.getElementById('prod-overlay')) closeProdModal(); }
+
+function addProdRowPM() {
+  pmProds.push({ name: '', price: 0 });
+  renderPMProds();
+}
+function removeProdRowPM(i) {
+  pmProds.splice(i, 1);
+  renderPMProds();
+}
+function renderPMProds() {
+  const container = document.getElementById('pm-prod-list');
+  const totalRow = document.getElementById('pm-prod-total-row');
+  if (!pmProds.length) {
+    container.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:4px 0 8px;">Sin productos. Usa el botón de abajo para agregar.</div>';
+    totalRow.style.display = 'none';
+    return;
+  }
+  let html = '';
+  pmProds.forEach((p, i) => {
+    html += `<div class="prod-item-row">
+      <input class="fi fi-prod" type="text" placeholder="Nombre del producto" value="${escHtml(p.name)}"
+        oninput="pmProds[${i}].name=this.value" style="font-size:12px;padding:8px 10px;" />
+      <input class="fi fi-prod" type="number" placeholder="S/ precio" value="${p.price || ''}" min="0" step="0.50"
+        oninput="pmProds[${i}].price=parseFloat(this.value)||0;updatePMTotal()" style="font-size:12px;padding:8px 10px;" />
+      <button class="btn-del-prod" onclick="removeProdRowPM(${i})" title="Quitar">✕</button>
+    </div>`;
+  });
+  container.innerHTML = html;
+  updatePMTotal();
+}
+function updatePMTotal() {
+  const t = pmProds.reduce((s, p) => s + (p.price || 0), 0);
+  const row = document.getElementById('pm-prod-total-row');
+  row.style.display = pmProds.length ? 'flex' : 'none';
+  document.getElementById('pm-prod-total').textContent = 'S/ ' + t.toFixed(2);
+}
+function saveProdModal() {
+  const i = data.findIndex(d => d.id === pmEditId);
+  if (i >= 0) data[i].products = pmProds.filter(p => p.name.trim());
+  save(); closeProdModal(); render();
+  toast('✓ Productos guardados', 'ok');
+}
+
+/* ─── CONFIRM ─── */
 function confirm2(title, msg, cb) {
   document.getElementById('conf-title').textContent = title;
   document.getElementById('conf-msg').textContent = msg;
@@ -479,12 +667,16 @@ function confirm2(title, msg, cb) {
 }
 function closeConfirm() { document.getElementById('conf-ov').classList.remove('open'); }
 
+/* ─── FILTROS ─── */
 function setFilt(f, btn) {
   filt = f;
   document.querySelectorAll('.ft').forEach(b => b.classList.remove('on'));
   btn.classList.add('on');
   render();
 }
+
+/* ─── RENDER PRINCIPAL ─── */
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function render() {
   const dates = [...new Set(data.map(d => d.date))].sort((a, b) => b.localeCompare(a));
@@ -493,6 +685,7 @@ function render() {
   const totalEfec  = data.reduce((s, d) => s + (d.efec || 0), 0);
   const totalBanc  = data.reduce((s, d) => s + (d.banc || 0), 0);
   const totalCobrado = totalEfec + totalBanc;
+  const totalProds = data.reduce((s, d) => s + totalProd(d), 0);
   const hoyN       = data.filter(d => d.date === hoy).length;
 
   document.getElementById('s-total').textContent        = data.length;
@@ -500,6 +693,7 @@ function render() {
   document.getElementById('s-total-cobrado').textContent= 'S/ ' + totalCobrado.toFixed(2);
   document.getElementById('s-efec').textContent         = 'S/ ' + totalEfec.toFixed(2);
   document.getElementById('s-banc').textContent         = 'S/ ' + totalBanc.toFixed(2);
+  document.getElementById('s-prod').textContent         = 'S/ ' + totalProds.toFixed(2);
   document.getElementById('s-hoy').textContent          = hoyN;
   document.getElementById('s-hsub').textContent         = hoyN === 1 ? 'trabajo hoy' : 'trabajos hoy';
 
@@ -524,6 +718,7 @@ function render() {
     if (!items.length) return;
     const totEfec = items.reduce((s, d) => s + (d.efec || 0), 0);
     const totBanc = items.reduce((s, d) => s + (d.banc || 0), 0);
+    const totProd = items.reduce((s, d) => s + totalProd(d), 0);
     const totDia  = totEfec + totBanc;
 
     html += `<div class="dg">
@@ -531,9 +726,10 @@ function render() {
         <span class="dg-name">${longDate(f)}</span>
         <span class="dg-meta">
           <span>${items.length} trabajos</span>
-          ${totDia > 0 ? `<span class="gold">total S/ ${totDia.toFixed(2)}</span>` : ''}
+          ${totDia > 0 ? `<span class="gold">mano obra S/ ${totDia.toFixed(2)}</span>` : ''}
           ${totEfec > 0 ? `<span class="g">efec. S/ ${totEfec.toFixed(2)}</span>` : ''}
           ${totBanc > 0 ? `<span class="b">banc. S/ ${totBanc.toFixed(2)}</span>` : ''}
+          ${totProd > 0 ? `<span class="p">prod. S/ ${totProd.toFixed(2)}</span>` : ''}
         </span>
       </div>
       <div class="tw"><table>
@@ -542,6 +738,7 @@ function render() {
           <th>Trabajo realizado</th>
           <th class="th-efec">Efectivo S/</th>
           <th class="th-banc">Bancario S/</th>
+          <th class="th-prod">Productos</th>
           <th class="th-total">Total S/</th>
           <th></th>
         </tr></thead>
@@ -550,12 +747,27 @@ function render() {
     items.forEach((item, i) => {
       const editE = editId === item.id && editField === 'efec';
       const editB = editId === item.id && editField === 'banc';
-      const tot   = total(item);
-      const hasPago = item.efec !== null || item.banc !== null;
+      const mo    = totalMO(item);
+      const tp    = totalProd(item);
+      const tot   = mo + tp;
+      const hasMO = item.efec !== null || item.banc !== null;
+      const prods = item.products || [];
+
+      // Columna productos
+      let prodHtml = '';
+      if (prods.length) {
+        prodHtml = '<div class="prod-list">';
+        prods.forEach(p => {
+          prodHtml += `<span class="prod-badge" title="${escHtml(p.name)}: S/ ${(p.price||0).toFixed(2)}">${escHtml(p.name)} <b style="opacity:.7">S/ ${(p.price||0).toFixed(2)}</b></span>`;
+        });
+        prodHtml += `<button class="ib p" onclick="openProdModal(${item.id})" title="Editar productos" style="font-size:11px;padding:2px 6px;">✏</button></div>`;
+      } else {
+        prodHtml = `<span class="prod-none" onclick="openProdModal(${item.id})" title="Agregar productos">+ productos</span>`;
+      }
 
       html += `<tr>
         <td class="tn">${i + 1}</td>
-        <td style="font-size:13px;color:var(--text)">${item.job}</td>
+        <td style="font-size:13px;color:var(--text)">${escHtml(item.job)}</td>
         <td>${editE
           ? `<input class="pi pi-efec" id="ei-${item.id}-efec" type="number" value="${item.efec || ''}" placeholder="0.00" min="0" step="0.5"
               onkeydown="if(event.key==='Enter')saveEdit(${item.id},'efec');if(event.key==='Escape'){editId=null;editField=null;render();}"
@@ -572,7 +784,8 @@ function render() {
             ? `<span class="cv cv-banc" onclick="startEdit(${item.id},'banc')" title="Clic para editar">S/ ${item.banc.toFixed(2)}</span>`
             : `<span class="cv cv-empty cv-empty-banc" onclick="startEdit(${item.id},'banc')" title="Agregar bancario">+ bancario</span>`
         }</td>
-        <td>${hasPago
+        <td style="min-width:160px">${prodHtml}</td>
+        <td>${(hasMO || prods.length)
           ? `<span class="cv-total">S/ ${tot.toFixed(2)}</span>`
           : `<span class="cv-pend-na">—</span>`
         }</td>
@@ -588,9 +801,7 @@ function render() {
   el.innerHTML = html;
 }
 
-// =====================================================
-//  EXPORTAR PDF — descarga directa sin nueva pestaña
-// =====================================================
+/* ─── EXPORTAR PDF ─── */
 function exportPDF() {
   if (!data.length) { toast('No hay datos para exportar', 'err'); return; }
 
@@ -601,16 +812,15 @@ function exportPDF() {
   const gE = data.reduce((s, d) => s + (d.efec || 0), 0);
   const gB = data.reduce((s, d) => s + (d.banc || 0), 0);
   const gT = gE + gB;
+  const gP = data.reduce((s, d) => s + totalProd(d), 0);
   const now = new Date().toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' });
 
-  // — Encabezado con barra dorada —
   doc.setFillColor(240, 165, 0);
   doc.rect(0, 0, 210, 24, 'F');
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(20);
   doc.setTextColor(0, 0, 0);
   doc.text('REGISTROS', 14, 15);
-  // Medir ancho de "REGISTROS" para posicionar "FREDDY" a continuación
   const rw = doc.getTextWidth('REGISTROS');
   doc.setTextColor(80, 40, 0);
   doc.text('FREDDY', 14 + rw + 1.5, 15);
@@ -618,74 +828,79 @@ function exportPDF() {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(60, 40, 0);
   doc.text('Reporte de trabajos del taller', 14, 21);
-  doc.setTextColor(60, 40, 0);
   doc.text('Exportado: ' + now + '   ·   ' + data.length + ' trabajos', 196, 21, { align: 'right' });
 
-  // — Tarjetas de resumen —
   let y = 32;
   const boxes = [
     { label: 'Total trabajos', value: String(data.length),    fill: [245,245,245], txt: [50,50,50] },
-    { label: 'Total cobrado',  value: 'S/ '+gT.toFixed(2),   fill: [255,243,205], txt: [130,90,0] },
+    { label: 'Mano de obra',   value: 'S/ '+gT.toFixed(2),   fill: [255,243,205], txt: [130,90,0] },
     { label: 'En efectivo',    value: 'S/ '+gE.toFixed(2),   fill: [209,250,229], txt: [20,120,50] },
     { label: 'Bancario',       value: 'S/ '+gB.toFixed(2),   fill: [219,234,254], txt: [30,80,200] },
+    { label: 'Productos',      value: 'S/ '+gP.toFixed(2),   fill: [237,233,254], txt: [80,50,180] },
   ];
-  const bw = 43, bh = 17, bx = 14, gap = 3;
+  const bw = 34, bh = 17, bx = 14, gap = 2;
   boxes.forEach((b, i) => {
     const x = bx + i * (bw + gap);
     doc.setFillColor(...b.fill);
     doc.roundedRect(x, y, bw, bh, 2, 2, 'F');
-    doc.setFontSize(7.5);
+    doc.setFontSize(7);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(120, 120, 120);
-    doc.text(b.label, x + 3, y + 6);
-    doc.setFontSize(13);
+    doc.text(b.label, x + 2.5, y + 6);
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(...b.txt);
-    doc.text(b.value, x + 3, y + 14);
+    doc.text(b.value, x + 2.5, y + 13.5);
   });
   y += bh + 8;
 
-  // — Filas de la tabla —
   const tableBody = [];
   dates.forEach(f => {
     const items = data.filter(d => d.date === f);
     const totE = items.reduce((s, d) => s + (d.efec || 0), 0);
     const totB = items.reduce((s, d) => s + (d.banc || 0), 0);
     const totD = totE + totB;
+    const totP = items.reduce((s, d) => s + totalProd(d), 0);
     const label = new Date(f + 'T12:00:00').toLocaleDateString('es-PE', {
       weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'
     }).replace(/^\w/, c => c.toUpperCase());
 
     const metaParts = [label + '   ·   ' + items.length + ' trabajos'];
-    if (totD > 0) metaParts.push('Total: S/ ' + totD.toFixed(2));
+    if (totD > 0) metaParts.push('M.Obra: S/ ' + totD.toFixed(2));
     if (totE > 0) metaParts.push('Efec: S/ ' + totE.toFixed(2));
     if (totB > 0) metaParts.push('Banc: S/ ' + totB.toFixed(2));
+    if (totP > 0) metaParts.push('Prod: S/ ' + totP.toFixed(2));
 
     tableBody.push([{
       content: metaParts.join('   ·   '),
-      colSpan: 5,
+      colSpan: 6,
       styles: { fillColor: [250, 247, 235], textColor: [100, 75, 10], fontStyle: 'bold', fontSize: 8, cellPadding: { top: 5, bottom: 5, left: 4, right: 4 } }
     }]);
 
     items.forEach((item, i) => {
-      const tot = total(item);
+      const mo  = totalMO(item);
+      const tp  = totalProd(item);
+      const tot = mo + tp;
+      const prods = (item.products || []).filter(p => p.name);
+      const prodStr = prods.length ? prods.map(p => p.name + ' S/' + (p.price||0).toFixed(2)).join(', ') : '—';
       tableBody.push([
         { content: String(i + 1), styles: { textColor: [190,190,190], halign: 'right', fontSize: 8 } },
         { content: item.job, styles: { textColor: [30,30,30] } },
         { content: item.efec ? 'S/ ' + item.efec.toFixed(2) : '—', styles: { textColor: item.efec ? [22,163,74] : [190,190,190], halign: 'right', fontStyle: item.efec ? 'bold' : 'normal' } },
         { content: item.banc ? 'S/ ' + item.banc.toFixed(2) : '—', styles: { textColor: item.banc ? [37,99,235] : [190,190,190], halign: 'right', fontStyle: item.banc ? 'bold' : 'normal' } },
-        { content: (item.efec || item.banc) ? 'S/ ' + tot.toFixed(2) : '—', styles: { textColor: (item.efec || item.banc) ? [180,130,0] : [190,190,190], halign: 'right', fontStyle: (item.efec || item.banc) ? 'bold' : 'normal' } },
+        { content: prodStr, styles: { textColor: prods.length ? [100,70,190] : [190,190,190], fontSize: 8 } },
+        { content: (item.efec || item.banc || prods.length) ? 'S/ ' + tot.toFixed(2) : '—', styles: { textColor: (item.efec || item.banc || prods.length) ? [180,130,0] : [190,190,190], halign: 'right', fontStyle: (item.efec || item.banc || prods.length) ? 'bold' : 'normal' } },
       ]);
     });
   });
 
-  // Fila de totales finales
   tableBody.push([
     { content: '', styles: { fillColor: [25,25,25] } },
     { content: 'TOTALES', styles: { fillColor: [25,25,25], textColor: [240,165,0], fontStyle: 'bold', fontSize: 10 } },
     { content: 'S/ ' + gE.toFixed(2), styles: { fillColor: [25,25,25], textColor: [74,222,128], fontStyle: 'bold', halign: 'right' } },
     { content: 'S/ ' + gB.toFixed(2), styles: { fillColor: [25,25,25], textColor: [147,197,253], fontStyle: 'bold', halign: 'right' } },
-    { content: 'S/ ' + gT.toFixed(2), styles: { fillColor: [25,25,25], textColor: [253,200,60], fontStyle: 'bold', halign: 'right', fontSize: 11 } },
+    { content: 'S/ ' + gP.toFixed(2), styles: { fillColor: [25,25,25], textColor: [196,181,253], fontStyle: 'bold', halign: 'right' } },
+    { content: 'S/ ' + (gT + gP).toFixed(2), styles: { fillColor: [25,25,25], textColor: [253,200,60], fontStyle: 'bold', halign: 'right', fontSize: 11 } },
   ]);
 
   doc.autoTable({
@@ -695,23 +910,24 @@ function exportPDF() {
       { content: 'Trabajo realizado', styles: { textColor: [80,80,80] } },
       { content: 'Efectivo', styles: { textColor: [22,163,74], halign: 'right' } },
       { content: 'Bancario', styles: { textColor: [37,99,235], halign: 'right' } },
+      { content: 'Productos usados', styles: { textColor: [100,70,190] } },
       { content: 'Total', styles: { textColor: [180,130,0], halign: 'right' } },
     ]],
     body: tableBody,
     styles: { fontSize: 9, cellPadding: 4, font: 'helvetica', lineColor: [230,230,230], lineWidth: 0.2 },
     headStyles: { fillColor: [245,245,245], textColor: [80,80,80], fontStyle: 'bold', fontSize: 9, lineWidth: 0 },
     columnStyles: {
-      0: { cellWidth: 10 },
-      2: { cellWidth: 28 },
-      3: { cellWidth: 28 },
-      4: { cellWidth: 30 }
+      0: { cellWidth: 8 },
+      2: { cellWidth: 22 },
+      3: { cellWidth: 22 },
+      4: { cellWidth: 52 },
+      5: { cellWidth: 26 }
     },
     margin: { left: 14, right: 14 },
     theme: 'plain',
     rowPageBreak: 'auto',
   });
 
-  // — Pie de página en cada hoja —
   const pageCount = doc.internal.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
@@ -724,12 +940,12 @@ function exportPDF() {
     doc.text('Pág. ' + i + ' / ' + pageCount, 196, 292, { align: 'right' });
   }
 
-  // — Descargar directamente —
   const filename = 'RegistrosFREDDY_' + new Date().toISOString().split('T')[0] + '.pdf';
   doc.save(filename);
   toast('✓ PDF descargado', 'ok');
 }
 
+/* ─── TOAST ─── */
 let toastTimer;
 function toast(msg, type = '') {
   const el = document.getElementById('toast');
