@@ -253,7 +253,7 @@ tbody tr:hover{background:var(--surface2);}
   <div class="stat">
     <div class="stat-l">Servicio</div>
     <div class="stat-v green" id="s-efec">S/ 0.00</div>
-    <div class="stat-sub">pagos en efectivo</div>
+    <div class="stat-sub">pagos en servicio</div>
   </div>
   <div class="stat">
     <div class="stat-l">Bancario</div>
@@ -278,7 +278,7 @@ tbody tr:hover{background:var(--surface2);}
     <div class="panel-lbl">Registro rápido</div>
     <div class="form-row">
       <input class="fi" type="text" id="q-job" placeholder="Trabajo realizado (ej. Cambio de aceite Toyota...)" />
-      <input class="fi fi-efec" type="number" id="q-efec" placeholder="S/ Efectivo" min="0" step="0.50" />
+      <input class="fi fi-efec" type="number" id="q-efec" placeholder="S/ Servicio" min="0" step="0.50" />
       <input class="fi fi-banc" type="number" id="q-banc" placeholder="S/ Bancario" min="0" step="0.50" />
       <input class="fi" type="date" id="q-date" />
       <button class="fi-add" onclick="quickAdd()">Registrar</button>
@@ -286,7 +286,7 @@ tbody tr:hover{background:var(--surface2);}
   </div>
 
   <div class="legend">
-    <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>Pago en efectivo</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--green)"></div>Pago en servicio</div>
     <div class="leg"><div class="leg-dot" style="background:var(--blue2)"></div>Pago bancario (Yape/transfer)</div>
     <div class="leg"><div class="leg-dot" style="background:var(--purple)"></div>Productos / materiales usados</div>
     <div class="leg"><div class="leg-dot" style="background:var(--gold2)"></div>Total mano de obra</div>
@@ -316,7 +316,7 @@ tbody tr:hover{background:var(--surface2);}
       <label>Forma de pago (mano de obra)</label>
       <div class="mf-row">
         <div>
-          <input class="fi fi-efec-m" style="width:100%" type="number" id="m-efec" placeholder="0.00 — Efectivo" min="0" step="0.50" />
+          <input class="fi fi-efec-m" style="width:100%" type="number" id="m-efec" placeholder="0.00 — Servicio" min="0" step="0.50" />
           <div class="mf-hint">💵 Servicio (S/)</div>
         </div>
         <div>
@@ -410,7 +410,6 @@ const INIT_DATA = [
 const KEY = 'tallerpro_v6';
 let data = JSON.parse(localStorage.getItem(KEY) || 'null');
 if (!data) {
-  // migrar desde versión anterior si existe
   const old = JSON.parse(localStorage.getItem('tallerpro_v5') || 'null');
   if (old) {
     data = old.map(d => ({...d, products: d.products || []}));
@@ -419,7 +418,6 @@ if (!data) {
   }
   save();
 }
-// asegurar campo products en registros viejos
 data = data.map(d => ({...d, products: d.products || []}));
 
 let nid = data.length ? Math.max(...data.map(d => d.id)) + 1 : 1;
@@ -511,11 +509,11 @@ function saveEdit(id, field) {
   if (i >= 0) data[i][field] = v !== '' ? parseFloat(v) : null;
   editId = null; editField = null;
   save(); render();
-  toast('✓ ' + (field === 'efec' ? 'Efectivo' : 'Bancario') + ' actualizado', 'ok');
+  toast('✓ ' + (field === 'efec' ? 'Servicio' : 'Bancario') + ' actualizado', 'ok');
 }
 
 /* ─── MODAL TRABAJO ─── */
-let mProds = []; // productos temporales en el modal
+let mProds = [];
 
 function addProdRow() {
   mProds.push({ name: '', price: 0 });
@@ -727,7 +725,7 @@ function render() {
         <span class="dg-meta">
           <span>${items.length} trabajos</span>
           ${totDia > 0 ? `<span class="gold">mano obra S/ ${totDia.toFixed(2)}</span>` : ''}
-          ${totEfec > 0 ? `<span class="g">efec. S/ ${totEfec.toFixed(2)}</span>` : ''}
+          ${totEfec > 0 ? `<span class="g">serv. S/ ${totEfec.toFixed(2)}</span>` : ''}
           ${totBanc > 0 ? `<span class="b">banc. S/ ${totBanc.toFixed(2)}</span>` : ''}
           ${totProd > 0 ? `<span class="p">prod. S/ ${totProd.toFixed(2)}</span>` : ''}
         </span>
@@ -736,7 +734,7 @@ function render() {
         <thead><tr>
           <th>#</th>
           <th>Trabajo realizado</th>
-          <th class="th-efec">Efectivo S/</th>
+          <th class="th-efec">Servicio S/</th>
           <th class="th-banc">Bancario S/</th>
           <th class="th-prod">Productos</th>
           <th class="th-total">Total S/</th>
@@ -753,7 +751,6 @@ function render() {
       const hasMO = item.efec !== null || item.banc !== null;
       const prods = item.products || [];
 
-      // Columna productos
       let prodHtml = '';
       if (prods.length) {
         prodHtml = '<div class="prod-list">';
@@ -774,7 +771,7 @@ function render() {
               onblur="saveEdit(${item.id},'efec')" />`
           : item.efec
             ? `<span class="cv cv-efec" onclick="startEdit(${item.id},'efec')" title="Clic para editar">S/ ${item.efec.toFixed(2)}</span>`
-            : `<span class="cv cv-empty cv-empty-efec" onclick="startEdit(${item.id},'efec')" title="Agregar efectivo">+ efectivo</span>`
+            : `<span class="cv cv-empty cv-empty-efec" onclick="startEdit(${item.id},'efec')" title="Agregar servicio">+ servicio</span>`
         }</td>
         <td>${editB
           ? `<input class="pi pi-banc" id="ei-${item.id}-banc" type="number" value="${item.banc || ''}" placeholder="0.00" min="0" step="0.5"
@@ -834,7 +831,7 @@ function exportPDF() {
   const boxes = [
     { label: 'Total trabajos', value: String(data.length),    fill: [245,245,245], txt: [50,50,50] },
     { label: 'Mano de obra',   value: 'S/ '+gT.toFixed(2),   fill: [255,243,205], txt: [130,90,0] },
-    { label: 'En efectivo',    value: 'S/ '+gE.toFixed(2),   fill: [209,250,229], txt: [20,120,50] },
+    { label: 'En servicio',    value: 'S/ '+gE.toFixed(2),   fill: [209,250,229], txt: [20,120,50] },
     { label: 'Bancario',       value: 'S/ '+gB.toFixed(2),   fill: [219,234,254], txt: [30,80,200] },
     { label: 'Productos',      value: 'S/ '+gP.toFixed(2),   fill: [237,233,254], txt: [80,50,180] },
   ];
@@ -867,7 +864,7 @@ function exportPDF() {
 
     const metaParts = [label + '   ·   ' + items.length + ' trabajos'];
     if (totD > 0) metaParts.push('M.Obra: S/ ' + totD.toFixed(2));
-    if (totE > 0) metaParts.push('Efec: S/ ' + totE.toFixed(2));
+    if (totE > 0) metaParts.push('Serv: S/ ' + totE.toFixed(2));
     if (totB > 0) metaParts.push('Banc: S/ ' + totB.toFixed(2));
     if (totP > 0) metaParts.push('Prod: S/ ' + totP.toFixed(2));
 
@@ -908,7 +905,7 @@ function exportPDF() {
     head: [[
       { content: '#', styles: { halign: 'right', textColor: [150,150,150] } },
       { content: 'Trabajo realizado', styles: { textColor: [80,80,80] } },
-      { content: 'Efectivo', styles: { textColor: [22,163,74], halign: 'right' } },
+      { content: 'Servicio', styles: { textColor: [22,163,74], halign: 'right' } },
       { content: 'Bancario', styles: { textColor: [37,99,235], halign: 'right' } },
       { content: 'Productos usados', styles: { textColor: [100,70,190] } },
       { content: 'Total', styles: { textColor: [180,130,0], halign: 'right' } },
